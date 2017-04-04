@@ -43,11 +43,14 @@ public class DifformedModel : MonoBehaviour {
 			// pour level 2 (trouver la rotation a transmettre a la reference pour qu'elles se suivent ? rapport entre deux axes ? comparaison avec un Dot en v2 ?? trouver l'axe a ignorer)
 			// pour level 3, trouver le moyen de verifier la position des pieces l'une par rapport a l'autre (raycast ca peut marcher izi, sinon comparaison avec un rapport donne ?)
 			foreach (GameObject answer in reference) {
-				if (Quaternion.Dot (this.transform.rotation, answer.transform.rotation) >= 0.95 && Quaternion.Dot (this.transform.rotation, answer.transform.rotation) <= 1.05)
+				if (Quaternion.Dot (this.transform.rotation, answer.transform.rotation) >= 0.95 && Quaternion.Dot (this.transform.rotation, answer.transform.rotation) <= 1.05){
 					Debug.Log ("Trop fort ce type");
+					if (PlayerPrefs.GetInt ("modetest") == 0)
+						PlayerPrefs.SetInt ("progression", PlayerPrefs.GetInt ("progression") + 1);
 				// affiche modale victoire + joue son
 				// change une variable du fichier de sav si en mode joueur
 				// modale = 2 boutons : -revenir au menu precedent  -quitter le jeu
+				}
 			}
 		}
 
@@ -57,15 +60,13 @@ public class DifformedModel : MonoBehaviour {
 
 		if (Input.GetMouseButtonDown(0)){ 
 			if (level > 2 && isActive == false && mousePressed == false) {  //Selection de la piece voulue si il y en a deux : OK
-				Debug.Log("Et ta soeur ?");
 				RaycastHit hit;
 				Ray objectDetection = Camera.main.ScreenPointToRay(Input.mousePosition);
-				if (Physics.Raycast (objectDetection, out hit, 100000, 3)) { 
+				if (Physics.Raycast (objectDetection, out hit)) { 
 					if (hit.collider.transform.parent.gameObject == this.gameObject) { 
 						isActive = true;
 						compagnon.GetComponent<DifformedModel>().isActive = false; 
 					}
-
 				}
 			}
 			mousePressed = true;                              // Prise en compte du clic pour les rotations simples : OK
