@@ -23,7 +23,7 @@ public class DifformedModel : MonoBehaviour {
     void Start () {
         this.transform.eulerAngles = starting_position;
 		appliedRotation = Vector3.zero;
-		actualRotation = Vector3.zero;
+		actualRotation = this.transform.position;
 //		if ()            GERER ICI LA CREATION DU DEUXIEME OBJET APRES LE NIVEAU 2 ?
 
     }
