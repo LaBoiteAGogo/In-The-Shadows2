@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DifformedModel : MonoBehaviour {
+
+                                                  // A APPLIQUER SUR LE "Main EleM" ET PAS SUR LE PARENT BORDEL DE MERDE
+
+
+public class DifformedModel : MonoBehaviour {            
     public Vector3 starting_position; //valeur exacte a corriger
     public int level;
 	public bool isActive; // si level 2, determine sur quel objet s'applique la rotation
