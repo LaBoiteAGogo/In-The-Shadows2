@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
                                                   // A APPLIQUER SUR LE "Main EleM" ET PAS SUR LE PARENT BORDEL DE MERDE
+												// AH NON EN FAIT C'EST TOUJOURS LA MERDE
 
 
 public class DifformedModel : MonoBehaviour {            
@@ -102,9 +104,9 @@ public class DifformedModel : MonoBehaviour {
 			if (mousePressed && !controlPressed) {               
 				mouseDiff = Input.mousePosition - mousePosition;
 				if (shiftPressed)
-					appliedRotation.y = mouseDiff.y - mouseDiff.x; // Rotation sur le deuxieme axe : OK   ---> doit etre "verticale", a checker
+					appliedRotation.y = mouseDiff.y - mouseDiff.x; // Rotation sur le deuxieme axe : OK   ---> doit etre "verticale", a checker //
 				else
-					appliedRotation.x = mouseDiff.y - mouseDiff.x; // Rotation sur le premier axe : OK   ---> doit etre "horizontale" , a checker
+					appliedRotation.x = mouseDiff.y - mouseDiff.x; // Rotation sur le premier axe : OK   ---> doit etre "horizontale" , a checker //
 				this.transform.Rotate (appliedRotation);
 				mousePosition = Input.mousePosition;
 				appliedRotation = Vector3.zero;
@@ -113,14 +115,14 @@ public class DifformedModel : MonoBehaviour {
 				mouseDiff = (Input.mousePosition - mousePosition) / 100;
 				transform.position = new Vector3 (transform.position.x + mouseDiff.x, transform.position.y + mouseDiff.y, transform.position.z);  // Deplacement de la piece active
 
-				if (transform.position.x <= 1.3f)                  // Limite les mouvements des pieces au champ de la camera
-					transform.position = new Vector3 (1.3f, transform.position.y, transform.position.z);
-				else if (transform.position.x >= 4.3f)
-					transform.position = new Vector3 (4.3f, transform.position.y, transform.position.z);
-				if (transform.position.y <= 1.45f)
-					transform.position = new Vector3 (transform.position.x, 1.45f, transform.position.z);
-				else if (transform.position.y >= 3.15f)
-					transform.position = new Vector3 (transform.position.x, 3.15f, transform.position.z); 
+				if (transform.position.x <= -2.3f)                  // Limite les mouvements des pieces au champ de la camera
+					transform.position = new Vector3 (-2.3f, transform.position.y, transform.position.z);
+				else if (transform.position.x >= 10.0f)
+					transform.position = new Vector3 (10.0f, transform.position.y, transform.position.z);
+				if (transform.position.y <= -1.0f)
+					transform.position = new Vector3 (transform.position.x, -1.0f, transform.position.z);
+				else if (transform.position.y >= 2.3f)
+					transform.position = new Vector3 (transform.position.x, 2.3f, transform.position.z); 
 
 				mousePosition = Input.mousePosition;
 			}
