@@ -20,14 +20,16 @@ public class DifformedModel : MonoBehaviour {
 	public bool controlPressed = false;
 	public GameObject[] reference; 
 	public GameObject compagnon;
+	public float yaw;
+	public float pitch;
 
-	private Vector3 appliedRotation;
+	public Vector3 appliedRotation;
 	public Vector3 actualRotation; //verif facultative
 	public Vector3 actualPosition;
 
 
     void Start () {
-        this.transform.eulerAngles = starting_position;
+   //     this.transform.eulerAngles = starting_position;
 		appliedRotation = Vector3.zero;
 		actualRotation = this.transform.position;
 //		if ()            GERER ICI LA CREATION DU DEUXIEME OBJET APRES LE NIVEAU 2 ?
@@ -40,7 +42,6 @@ public class DifformedModel : MonoBehaviour {
 //		Debug.Log (Quaternion.Dot (this.transform.rotation, reference[0].transform.rotation));
 		actualRotation = this.transform.eulerAngles;
 		actualPosition = this.transform.position;
-
 
 
 		//                                                         CHECK BONNE REPONSE
@@ -104,12 +105,21 @@ public class DifformedModel : MonoBehaviour {
 			if (mousePressed && !controlPressed) {               
 				mouseDiff = Input.mousePosition - mousePosition;
 				if (shiftPressed)
-					appliedRotation.y = mouseDiff.y - mouseDiff.x; // Rotation sur le deuxieme axe : OK   ---> doit etre "verticale", a checker //
+					pitch = (mouseDiff.y - mouseDiff.x); // Rotation sur le deuxieme axe : OK   ---> doit etre "verticale", a checker //
 				else
-					appliedRotation.x = mouseDiff.y - mouseDiff.x; // Rotation sur le premier axe : OK   ---> doit etre "horizontale" , a checker //
-				this.transform.Rotate (appliedRotation);
+					yaw = (mouseDiff.y - mouseDiff.x); // Rotation sur le premier axe : OK   ---> doit etre "horizontale" , a checker //
+
+			//	transform.rotation = Quaternion.Euler(yaw, pitch, 0);
+
+//				Transform child = transform.GetChild(0); //rotation du child pour manipuler des 0
+
+//				child.transform.Rotate(appliedRotation);
+			
+
+
+				this.transform.Rotate (yaw, pitch, 0);
 				mousePosition = Input.mousePosition;
-				appliedRotation = Vector3.zero;
+//				appliedRotation = Vector3.zero; useless ?
 			} 
 			else if (mousePressed && controlPressed) { 
 				mouseDiff = (Input.mousePosition - mousePosition) / 100;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class LoadOnClick : MonoBehaviour {
 
 	public GameObject[] tab1; //boutons du menu
@@ -14,49 +15,34 @@ public class LoadOnClick : MonoBehaviour {
 	public GameObject[] levels;
 
 	public GameObject[] spots;
+	public GameObject mainLight;
 
-	//ajouter une coroutine a chaque clic de bouton : fermeture du spot puis reouverture
-	//trouver le moyen de mettre plus de pénombre
+	private IEnumerator coroutine;
+
+	bool isRunning = false;
+
+	//ajouter une coroutine a chaque clic de bouton : fermeture du spot puis reouverture -> le spot ne se rouvre que sur le menu principal
 	//allumer les spots de niveau l'un après l'autre
-	//gerer prefab d'elements de niveau ?
+
+
+	void Start () {
+		PlayerPrefs.DeleteAll();
+		Debug.Log(PlayerPrefs.GetInt ("progression"));
+	}
+
+
 
 	public void HideButtons (int ButtonType) // remplacer les boutons par des objets IG invisibles pour empecher les pb de resize ?
 	{
-//		LightManagement (0);
-		if (ButtonType == 0) {			
-			MenuElements.SetActive (false);
-			LevelSelector.SetActive (true);
-			foreach (GameObject bouton in tab1)
-				bouton.SetActive (false);
-			if (PlayerPrefs.GetInt ("modetest") == 0) {
-				int i = 0;
-				Debug.Log ("test");
-				while (i <= PlayerPrefs.GetInt ("progression")) {
-					tab2 [i].SetActive (true);
-					i++;
-				}
-				tab2 [3].SetActive (true);
-			} else {
-				foreach (GameObject bouton in tab2)
-					bouton.SetActive (true);
-			}
-//			LightManagement (2);
-		} else if (ButtonType == 1) { //si on clique sur un niveau
-			LevelSelector.SetActive (false);
-			foreach (GameObject bouton in tab2)
-				bouton.SetActive (false);
-			tab2 [3].SetActive (true);
-		} else if (ButtonType == 2) { // si on clique sur retour
-			if (LevelSelector.activeInHierarchy) { // dans le menu
-				LevelSelector.SetActive (false);
-				MenuElements.SetActive (true);
-				foreach (GameObject bouton in tab1)
-					bouton.SetActive (true);
-				foreach (GameObject bouton in tab2)
-					bouton.SetActive (false);
-//				LightManagement (1);
-			} else { //pendant qu'on joue
+		StartCoroutine (Launcher (0));
+	//	if (isRunning) {
+			Debug.Log (ButtonType);
+			
+			if (ButtonType == 0) {			
+				MenuElements.SetActive (false);
 				LevelSelector.SetActive (true);
+				foreach (GameObject bouton in tab1)
+					bouton.SetActive (false);
 				if (PlayerPrefs.GetInt ("modetest") == 0) {
 					int i = 0;
 					Debug.Log ("test");
@@ -68,25 +54,91 @@ public class LoadOnClick : MonoBehaviour {
 				} else {
 					foreach (GameObject bouton in tab2)
 						bouton.SetActive (true);
+					foreach (GameObject spotlight in spots) {
+						Light spot = spotlight.GetComponent<Light> ();
+						spot.color = Color.green;
+					}
 				}
-				foreach (GameObject level in levels)
+				Debug.Log ("ouveture");
+/*			if (PlayerPrefs.GetInt ("progression") > 0) {
+				if (PlayerPrefs.GetInt ("progression") > 2) {
+					Light Spot3 = spots [3].GetComponent<Light> ();
+					Spot3.color = Color.green;
+				}
+				Light Spot1 = spots [1].GetComponent<Light> ();
+
+			}*/
+//			StartCoroutine(Spots(2));   // allume aussi spots niveaux 
+			} else if (ButtonType == 1) { //si on clique sur un niveau
+				LevelSelector.SetActive (false);
+				foreach (GameObject bouton in tab2)
+					bouton.SetActive (false);
+				tab2 [3].SetActive (true);
+			} else if (ButtonType == 2) { // si on clique sur retour
+				if (LevelSelector.activeInHierarchy) { // dans le menu
+					LevelSelector.SetActive (false);
+					MenuElements.SetActive (true);
+					foreach (GameObject bouton in tab1)
+						bouton.SetActive (true);
+					foreach (GameObject bouton in tab2)
+						bouton.SetActive (false);
+//				LightManager(1);
+				} else { //pendant qu'on joue
+					LevelSelector.SetActive (true);
+					if (PlayerPrefs.GetInt ("modetest") == 0) {
+						int i = 0;
+						Debug.Log ("test");
+						while (i <= PlayerPrefs.GetInt ("progression")) {
+							tab2 [i].SetActive (true);
+							i++;
+						}
+						tab2 [3].SetActive (true);
+					} else {
+						foreach (GameObject bouton in tab2)
+							bouton.SetActive (true);
+					}
+					foreach (GameObject level in levels)
 						level.SetActive (false);
 				
+				}
 			}
+	//	}
+	}
+
+
+	IEnumerator Launcher(int i){
+		yield return StartCoroutine(Spots(i));
+
+		if (i == 0)
+			mainLight.SetActive (false);			
+	}
+
+	IEnumerator Spots(int i) {
+		if (i == 0) {
+			for (float f = 1f; f >= 0.1; f -= 0.1f) {
+				Light c = mainLight.GetComponent<Light> ();
+				c.spotAngle = c.spotAngle * f;
+				yield return new WaitForSeconds (0.03f);
+			}
+		isRunning = true;
+		//	mainLight.SetActive (false);
+		} else {
+			mainLight.SetActive (true);
+			Light c = mainLight.GetComponent<Light> ();
+			while (c.spotAngle < 50.0f) { 
+				Debug.Log (c.spotAngle);
+				c.spotAngle *= 1.1f;
+				yield return new WaitForSeconds (0.00005f);
+			}
+
 		}
+		yield return null;
+			Debug.Log ("huhu");
+
 	}
+	
 
 
-			
-/*	public void LightManagement(int lights){
-		if (lights == 0)
-			//close spot
-		else 
-			//open spot
-			if (lights == 2)
-				// allume les 3 spots dans l'ordre
-	}
-*/
 	public void LoadScene(int level){
 //		GameObject LevelElements = levels [level];
 //		LevelElements.SetActive (true);

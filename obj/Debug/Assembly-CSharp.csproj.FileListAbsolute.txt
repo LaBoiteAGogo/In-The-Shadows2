@@ -27,7 +27,3 @@ C:\Users\Gauthier\Documents\In The Shadows\Temp\bin\Debug\UnityEngine.VR.xml
 C:\Users\Gauthier\Documents\In The Shadows\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\Gauthier\Documents\In The Shadows\obj\Debug\Assembly-CSharp.dll
 C:\Users\Gauthier\Documents\In The Shadows\obj\Debug\Assembly-CSharp.pdb
-C:\Users\Gauthier\Documents\In The Shadows\Temp\bin\Debug\UnityEngine.Advertisements.dll
-C:\Users\Gauthier\Documents\In The Shadows\Temp\bin\Debug\UnityEngine.Purchasing.dll
-C:\Users\Gauthier\Documents\In The Shadows\Temp\bin\Debug\UnityEngine.Advertisements.xml
-C:\Users\Gauthier\Documents\In The Shadows\Temp\bin\Debug\UnityEngine.Purchasing.xml
