@@ -30,7 +30,7 @@ public class LoadOnClick : MonoBehaviour {
 
 
 	void Start () {
-		PlayerPrefs.DeleteAll();                                // A RETIRER A TERME
+//		PlayerPrefs.DeleteAll();                                // A RETIRER A TERME
 //		Debug.Log(PlayerPrefs.GetInt ("progression"));
 	}
 
@@ -88,7 +88,6 @@ public class LoadOnClick : MonoBehaviour {
 					LevelSelector.SetActive (true);
 					if (PlayerPrefs.GetInt ("modetest") == 0) {
 						int i = 0;
-						Debug.Log ("test");
 						while (i <= PlayerPrefs.GetInt ("progression")) {
 						Level_Spots (i);
 							tab2 [i].SetActive (true);
@@ -99,7 +98,6 @@ public class LoadOnClick : MonoBehaviour {
 						foreach (GameObject bouton in tab2)
 							bouton.SetActive (true);
 					}
-				Debug.Log ("mmmmh");
 					foreach (GameObject level in levels)
 						level.SetActive (false);
 				
