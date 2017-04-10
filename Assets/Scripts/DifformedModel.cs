@@ -27,8 +27,13 @@ public class DifformedModel : MonoBehaviour {
 	public Vector3 actualRotation; //verif facultative
 	public Vector3 actualPosition;
 
+	public GameObject modal;
 
-    void Start () {
+
+    void Start () {  // appelé que la première fois qu'on passe à Active ? diff avec Awake ?
+		Debug.Log ("ICICICI");
+		PlayerPrefs.SetInt ("Last Played Level", level - 1); 
+		mousePressed = false;
    //     this.transform.eulerAngles = starting_position;
 		appliedRotation = Vector3.zero;
 		actualRotation = this.transform.position;
@@ -42,7 +47,7 @@ public class DifformedModel : MonoBehaviour {
 //		Debug.Log (Quaternion.Dot (this.transform.rotation, reference[0].transform.rotation));
 		actualRotation = this.transform.eulerAngles;
 		actualPosition = this.transform.position;
-
+//		Debug.Log (Quaternion.Dot (this.transform.rotation, reference[0].transform.rotation));
 
 		//                                                         CHECK BONNE REPONSE
 		if (!Input.GetMouseButton (0)) { 
@@ -50,13 +55,12 @@ public class DifformedModel : MonoBehaviour {
 			// pour level 2 (trouver la rotation a transmettre a la reference pour qu'elles se suivent ? rapport entre deux axes ? comparaison avec un Dot en v2 ?? trouver l'axe a ignorer)
 			// pour level 3, trouver le moyen de verifier la position des pieces l'une par rapport a l'autre (raycast ca peut marcher izi, sinon comparaison avec un rapport donne ?)
 			foreach (GameObject answer in reference) {
-				if (Quaternion.Dot (this.transform.rotation, answer.transform.rotation) >= 0.95 && Quaternion.Dot (this.transform.rotation, answer.transform.rotation) <= 1.05){
+				if ((Quaternion.Dot (this.transform.rotation, answer.transform.rotation) >= 0.95 && Quaternion.Dot (this.transform.rotation, answer.transform.rotation) <= 1.05 )
+					|| (Quaternion.Dot (this.transform.rotation, answer.transform.rotation) <= -0.95 && Quaternion.Dot (this.transform.rotation, answer.transform.rotation) >= -1.05)){
+					mousePressed = false;
 					Debug.Log ("Trop fort ce type");
-					if (PlayerPrefs.GetInt ("modetest") == 0)
-						PlayerPrefs.SetInt ("progression", PlayerPrefs.GetInt ("progression") + 1);
-				// affiche modale victoire + joue son
-				// change une variable du fichier de sav si en mode joueur
-				// modale = 2 boutons : -revenir au menu precedent  -quitter le jeu
+					modal.SetActive (true);
+				// joue son ?
 				}
 			}
 		}
@@ -84,7 +88,7 @@ public class DifformedModel : MonoBehaviour {
 
 		if (level  > 1) {                                     //Prise en compte de shift pour les rotations sur un autre axe : OK
 			if (Input.GetButtonDown ("Fire3")) {
-				shiftPressed = true;
+				shiftPressed = true;							
 				mousePosition = Input.mousePosition;
 			}
 			else if (Input.GetButtonUp ("Fire3"))
@@ -119,7 +123,9 @@ public class DifformedModel : MonoBehaviour {
 
 				this.transform.Rotate (yaw, pitch, 0);
 				mousePosition = Input.mousePosition;
-//				appliedRotation = Vector3.zero; useless ?
+				yaw = 0f;
+				pitch = 0f;
+//				appliedRotation = Vector3.zero; 
 			} 
 			else if (mousePressed && controlPressed) { 
 				mouseDiff = (Input.mousePosition - mousePosition) / 100;

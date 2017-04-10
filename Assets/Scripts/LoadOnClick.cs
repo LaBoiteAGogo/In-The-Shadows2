@@ -17,24 +17,29 @@ public class LoadOnClick : MonoBehaviour {
 	public GameObject[] spots;
 	public GameObject mainLight;
 
+	public GameObject modal;
+
 	private IEnumerator coroutine;
 
-	bool isRunning = false;
+//	public int progression_test = 0;
+
+	//bool isRunning = false;
 
 	//ajouter une coroutine a chaque clic de bouton : fermeture du spot puis reouverture -> le spot ne se rouvre que sur le menu principal
 	//allumer les spots de niveau l'un après l'autre
 
 
 	void Start () {
-		PlayerPrefs.DeleteAll();
-		Debug.Log(PlayerPrefs.GetInt ("progression"));
+		PlayerPrefs.DeleteAll();                                // A RETIRER A TERME
+//		Debug.Log(PlayerPrefs.GetInt ("progression"));
 	}
 
 
 
 	public void HideButtons (int ButtonType) // remplacer les boutons par des objets IG invisibles pour empecher les pb de resize ?
 	{
-		StartCoroutine (Launcher (0));
+//		StartCoroutine (Launcher (0));
+//		StartCoroutine (SpotClose());
 	//	if (isRunning) {
 			Debug.Log (ButtonType);
 			
@@ -43,10 +48,11 @@ public class LoadOnClick : MonoBehaviour {
 				LevelSelector.SetActive (true);
 				foreach (GameObject bouton in tab1)
 					bouton.SetActive (false);
-				if (PlayerPrefs.GetInt ("modetest") == 0) {
+				if (PlayerPrefs.GetInt ("modetest") == 0) { // rajouter ici gestion des spots selon la progression
 					int i = 0;
-					Debug.Log ("test");
+				Debug.Log ("Progression" + PlayerPrefs.GetInt ("progression"));
 					while (i <= PlayerPrefs.GetInt ("progression")) {
+						Level_Spots (i);
 						tab2 [i].SetActive (true);
 						i++;
 					}
@@ -59,36 +65,32 @@ public class LoadOnClick : MonoBehaviour {
 						spot.color = Color.green;
 					}
 				}
-				Debug.Log ("ouveture");
-/*			if (PlayerPrefs.GetInt ("progression") > 0) {
-				if (PlayerPrefs.GetInt ("progression") > 2) {
-					Light Spot3 = spots [3].GetComponent<Light> ();
-					Spot3.color = Color.green;
-				}
-				Light Spot1 = spots [1].GetComponent<Light> ();
-
-			}*/
-//			StartCoroutine(Spots(2));   // allume aussi spots niveaux 
+//			StartCoroutine (Launcher (1));
+//			StartCoroutine(SpotOpen());   // allume aussi spots niveaux 
 			} else if (ButtonType == 1) { //si on clique sur un niveau
 				LevelSelector.SetActive (false);
 				foreach (GameObject bouton in tab2)
 					bouton.SetActive (false);
 				tab2 [3].SetActive (true);
-			} else if (ButtonType == 2) { // si on clique sur retour
-				if (LevelSelector.activeInHierarchy) { // dans le menu
+			} else if (ButtonType >= 2) { // si on clique sur retour
+			if (LevelSelector.activeInHierarchy && ButtonType != 3) { // dans le menu
 					LevelSelector.SetActive (false);
 					MenuElements.SetActive (true);
 					foreach (GameObject bouton in tab1)
 						bouton.SetActive (true);
 					foreach (GameObject bouton in tab2)
 						bouton.SetActive (false);
-//				LightManager(1);
+//				StartCoroutine (Launcher (1));
+	//			StartCoroutine (SpotOpen ());
 				} else { //pendant qu'on joue
+				if (ButtonType == 3)
+					modal.SetActive (false);
 					LevelSelector.SetActive (true);
 					if (PlayerPrefs.GetInt ("modetest") == 0) {
 						int i = 0;
 						Debug.Log ("test");
 						while (i <= PlayerPrefs.GetInt ("progression")) {
+						Level_Spots (i);
 							tab2 [i].SetActive (true);
 							i++;
 						}
@@ -97,6 +99,7 @@ public class LoadOnClick : MonoBehaviour {
 						foreach (GameObject bouton in tab2)
 							bouton.SetActive (true);
 					}
+				Debug.Log ("mmmmh");
 					foreach (GameObject level in levels)
 						level.SetActive (false);
 				
@@ -105,38 +108,85 @@ public class LoadOnClick : MonoBehaviour {
 	//	}
 	}
 
-
-	IEnumerator Launcher(int i){
-		yield return StartCoroutine(Spots(i));
-
-		if (i == 0)
-			mainLight.SetActive (false);			
+	public void Progression_Manager()
+	{
+		if (PlayerPrefs.GetInt ("modetest") == 0 && PlayerPrefs.GetInt ("progression") == PlayerPrefs.GetInt ("Last Played Level")) {
+			PlayerPrefs.SetInt ("progression", (PlayerPrefs.GetInt ("progression") + 1));
+		}
 	}
 
-	IEnumerator Spots(int i) {
+	void Level_Spots(int i)
+	{
+		if (i == 3) {                                             // JE
+			Light spot = spots[2].GetComponent<Light> ();         // CODE
+			spot.color = Color.green;                             // AVEC
+		} 
+		if (i == 2) {
+			Light spot = spots[1].GetComponent<Light> ();         // LE
+			spot.color = Color.green;
+			Light spot2 = spots [2].GetComponent<Light> ();       // CUL
+			spot2.color = Color.blue;
+		}
+		if (i == 1) {
+			Light spot = spots[0].GetComponent<Light> ();         // LALALA
+			spot.color = Color.green;
+			Light spot2 = spots [1].GetComponent<Light> ();      // LALA
+			spot2.color = Color.blue;
+		}
 		if (i == 0) {
+			Debug.Log ("ouiiii");
+			Light spot = spots [0].GetComponent<Light> ();      // LEEEREEUH
+			spot.color = Color.blue;
+			Light spot1 = spots [1].GetComponent<Light> ();      // LEEEREEUH
+			spot1.color = Color.red;
+			Light spot2 = spots [2].GetComponent<Light> ();      // LEEEREEUH
+			spot2.color = Color.red;
+		}
+	}
+
+	IEnumerator Launcher(int i){
+
+		if (i == 0) {
+			yield return StartCoroutine (SpotClose ());
+			mainLight.SetActive (false);
+	//		StopCoroutine (SpotClose ());
+		} else if (i == 1) {
+			mainLight.SetActive (true);
+			yield return StartCoroutine (SpotOpen ());
+	//		StopCoroutine (SpotOpen ());
+		}
+			
+	} 
+
+	IEnumerator SpotClose() {
+	//	if (i == 0) {
 			for (float f = 1f; f >= 0.1; f -= 0.1f) {
 				Light c = mainLight.GetComponent<Light> ();
 				c.spotAngle = c.spotAngle * f;
-				yield return new WaitForSeconds (0.03f);
-			}
-		isRunning = true;
+			yield return new WaitForSeconds (0.03f);
+			//	yield return new WaitForSeconds (0.03f);
+	//		}
+		//isRunning = true;
 		//	mainLight.SetActive (false);
-		} else {
-			mainLight.SetActive (true);
+		}
+	//	yield return null;
+	}
+
+
+//} else {
+	IEnumerator SpotOpen(){
+//			mainLight.SetActive (true);
 			Light c = mainLight.GetComponent<Light> ();
 			while (c.spotAngle < 50.0f) { 
-				Debug.Log (c.spotAngle);
 				c.spotAngle *= 1.1f;
 				yield return new WaitForSeconds (0.00005f);
 			}
 
 		}
-		yield return null;
-			Debug.Log ("huhu");
+//		yield return null;
+//			Debug.Log ("huhu");
 
-	}
-	
+//	}
 
 
 	public void LoadScene(int level){
