@@ -1,9 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelUnlock.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LoadOnClick.cs">
     <Files>
-      <File FileName="Assets\Scripts\DifformedModel.cs" Line="53" Column="36" />
-      <File FileName="Assets\Scripts\LoadOnClick.cs" Line="110" Column="2" />
+      <File FileName="Assets\Scripts\DifformedModel.cs" Line="144" Column="63" />
+      <File FileName="Assets\Scripts\LoadOnClick.cs" Line="30" Column="2" />
       <File FileName="Assets\Scripts\LevelUnlock.cs" Line="30" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>

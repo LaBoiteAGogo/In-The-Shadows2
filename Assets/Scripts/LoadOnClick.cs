@@ -30,13 +30,13 @@ public class LoadOnClick : MonoBehaviour {
 
 
 	void Start () {
-//		PlayerPrefs.DeleteAll();                                // A RETIRER A TERME
+		PlayerPrefs.DeleteAll();                                // A RETIRER A TERME
 //		Debug.Log(PlayerPrefs.GetInt ("progression"));
 	}
 
 
 
-	public void HideButtons (int ButtonType) // remplacer les boutons par des objets IG invisibles pour empecher les pb de resize ?
+	public void HideButtons (int ButtonType)
 	{
 //		StartCoroutine (Launcher (0));
 //		StartCoroutine (SpotClose());
@@ -48,7 +48,7 @@ public class LoadOnClick : MonoBehaviour {
 				LevelSelector.SetActive (true);
 				foreach (GameObject bouton in tab1)
 					bouton.SetActive (false);
-				if (PlayerPrefs.GetInt ("modetest") == 0) { // rajouter ici gestion des spots selon la progression
+				if (PlayerPrefs.GetInt ("modetest") == 0) {
 					int i = 0;
 				Debug.Log ("Progression" + PlayerPrefs.GetInt ("progression"));
 					while (i <= PlayerPrefs.GetInt ("progression")) {

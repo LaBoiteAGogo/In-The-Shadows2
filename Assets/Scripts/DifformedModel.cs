@@ -21,17 +21,30 @@ public class DifformedModel : MonoBehaviour {
 
 	public Vector3 actualRotation; //verif facultative
 	public Vector3 actualPosition;
+	public Quaternion startingRotation;
+	public Vector3 startingPosition;
+
 
 	public GameObject modal;
 
 
-	void OnEnable() {                                         // rajouter ici le reset de position
+	void Awake () {
+		startingPosition = this.transform.position;
+		startingRotation = this.transform.rotation;
+		Debug.Log (startingPosition);
+		Debug.Log (startingRotation);
+	}
+
+	void OnEnable() {                                  
 		PlayerPrefs.SetInt ("Last Played Level", level - 1); 
 		actualRotation = this.transform.position;
 		mousePressed = false;
+		this.transform.position = startingPosition;
+		this.transform.rotation = startingRotation;
 	}
 
     void Start () { 
+		
     }
 	
 
@@ -44,15 +57,13 @@ public class DifformedModel : MonoBehaviour {
 		//                                                         CHECK BONNE REPONSE
 		if (!Input.GetMouseButton (0)) { 
 			if (level == 3) {
-				Debug.Log ("Player =" + (this.transform.position - compagnon.transform.position));
-				Debug.Log ("Reference = " + (reference [0].transform.position - reference [1].transform.position));
+//				Debug.Log ("Player =" + (this.transform.position - compagnon.transform.position));
+//				Debug.Log ("Reference = " + (reference [0].transform.position - reference [1].transform.position));
 				if (((Quaternion.Dot (this.transform.rotation, reference [0].transform.rotation) >= 0.95 && Quaternion.Dot (this.transform.rotation, reference [0].transform.rotation) <= 1.05)
 					|| (Quaternion.Dot (this.transform.rotation, reference [0].transform.rotation) <= -0.95 && Quaternion.Dot (this.transform.rotation, reference [0].transform.rotation) >= -1.05)) 
 					&& ((Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) >= 0.95 && Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) <= 1.05)
 						|| (Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) <= -0.95 && Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) >= -1.05)) ) {
-					Debug.Log ("FRANCE");
 					if (this.transform.position.ToString("F1") == compagnon.transform.position.ToString("F1")) {   // solution temporaire pour level max
-						Debug.Log ("test");
 						mousePressed = false;
 						modal.SetActive (true);
 					}
@@ -130,17 +141,17 @@ public class DifformedModel : MonoBehaviour {
 				transform.position = new Vector3 (transform.position.x + mouseDiff.x, transform.position.y + mouseDiff.y, transform.position.z);  // Deplacement de la piece active
 
 
-				// Limite les mouvements des pieces au champ de la camera -> a modifier pour rester dans la lumiere
+				// Limite les mouvements des pieces au champ de la camera 
 
 
-				if (transform.position.x <= -2.3f)                                                                  
-					transform.position = new Vector3 (-2.3f, transform.position.y, transform.position.z);
-				else if (transform.position.x >= 10.0f)
-					transform.position = new Vector3 (10.0f, transform.position.y, transform.position.z);
-				if (transform.position.y <= -1.0f)
-					transform.position = new Vector3 (transform.position.x, -1.0f, transform.position.z);
-				else if (transform.position.y >= 2.3f)
-					transform.position = new Vector3 (transform.position.x, 2.3f, transform.position.z); 
+				if (transform.position.x <= -0.1f)                                                                  
+					transform.position = new Vector3 (-0.3f, transform.position.y, transform.position.z);
+				else if (transform.position.x >= 6.4f)
+					transform.position = new Vector3 (6.4f, transform.position.y, transform.position.z);
+				if (transform.position.y <= -1.6f)
+					transform.position = new Vector3 (transform.position.x, -1.6f, transform.position.z);
+				else if (transform.position.y >= 2.8f)
+					transform.position = new Vector3 (transform.position.x, 2.8f, transform.position.z); 
 
 				mousePosition = Input.mousePosition;
 			}
