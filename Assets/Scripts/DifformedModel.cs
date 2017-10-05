@@ -64,6 +64,7 @@ public class DifformedModel : MonoBehaviour {
 					&& ((Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) >= 0.95 && Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) <= 1.05)
 						|| (Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) <= -0.95 && Quaternion.Dot (compagnon.transform.rotation, reference [1].transform.rotation) >= -1.05)) ) {
 					if (this.transform.position.ToString("F1") == compagnon.transform.position.ToString("F1")) {   // solution temporaire pour level max
+			//		if (this.transform.position == compagnon.transform.position) {   // solution temporaire pour level max
 						mousePressed = false;
 						modal.SetActive (true);
 					}

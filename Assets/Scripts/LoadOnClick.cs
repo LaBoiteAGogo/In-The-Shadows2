@@ -13,6 +13,7 @@ public class LoadOnClick : MonoBehaviour {
 	public GameObject LevelSelector;
 
 	public GameObject[] levels;
+	public GameObject[] texts;
 
 	public GameObject[] spots;
 	public GameObject mainLight;
@@ -100,6 +101,8 @@ public class LoadOnClick : MonoBehaviour {
 					}
 					foreach (GameObject level in levels)
 						level.SetActive (false);
+				foreach (GameObject text in texts)
+					text.SetActive (false);
 				
 				}
 			}
@@ -191,6 +194,7 @@ public class LoadOnClick : MonoBehaviour {
 //		GameObject LevelElements = levels [level];
 //		LevelElements.SetActive (true);
 		levels [level].SetActive (true);
+		texts [level].SetActive (true);
 
 	}
 
